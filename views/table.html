@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel Dinamis</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tabel Dinamis dengan JavaScript</h1>
+    
+    <!-- Tombol untuk menambah baris -->
+    <button onclick="addRow()">Tambah Baris</button>
+    
+    <table id="dynamicTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Baris tabel akan ditambahkan di sini -->
+        </tbody>
+    </table>
+
+    <script>
+        let rowId = 1;  // ID baris mulai dari 1
+        
+        // Fungsi untuk menambah baris baru
+        function addRow() {
+            const tableBody = document.getElementById("dynamicTable").getElementsByTagName('tbody')[0];
+            
+            // Membuat baris baru
+            let newRow = tableBody.insertRow();
+            
+            // Menambahkan sel ke dalam baris
+            let cell1 = newRow.insertCell(0);
+            let cell2 = newRow.insertCell(1);
+            let cell3 = newRow.insertCell(2);
+            let cell4 = newRow.insertCell(3);
+            
+            // Mengisi sel dengan data atau form input
+            cell1.textContent = rowId++;  // ID otomatis bertambah
+            cell2.innerHTML = `<input type="text" value="Name ${rowId-1}"/>`;
+            cell3.innerHTML = `<input type="email" value="email${rowId-1}@example.com"/>`;
+            cell4.innerHTML = `<button onclick="deleteRow(this)">Hapus</button>`;
+        }
+
+        // Fungsi untuk menghapus baris
+        function deleteRow(button) {
+            // Menemukan baris yang berisi tombol yang diklik
+            let row = button.closest("tr");
+            row.remove();
+        }
+    </script>
+</body>
+</html>

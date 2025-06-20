@@ -1,0 +1,145 @@
+{{template "layout" .}}
+
+{{define "main"}}
+    <div class="modal fade" id="exampleModalDefault" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Barang</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/process" method="post" class="row g-3" autocomplete="off">
+                    <div class="col-md-8">
+                        <label for="barang" class="form-label">Nama Barang</label>
+                        <input type="text" name="barang" class="form-control" id="barang" value="" required>
+                    </div>
+                    <div class="col-md-8">
+                        <label for="kategori" class="form-label">Pilih Kategori</label>
+                        <select class="form-select" name="kategori" id="kategori">
+                            {{range .Kategories}}
+                                <option value="{{.ID}}">{{.NamaKategori}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <label for="harga" class="form-label">Harga</label>
+                        <input type="number" step="1" class="form-control" name="harga" id="harga" value="" required min="0" data-bind="value:harga" >
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Simpan" class="btn btn-primary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modalEditBarang" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data Barang</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/update" method="post" class="row g-3">
+                    <div class="col-md-8">
+                        <label for="idBarang" class="form-label">ID Barang</label>
+                        <input type="text" name="idBarang" disabled class="form-control" id="idBarang" value="">
+                    </div>
+                    <div class="col-md-8">
+                        <label for="barang" class="form-label">Nama Barang</label>
+                        <input type="text" name="barang" class="form-control" id="barang" value="" required>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label for="kategori" class="form-label">Pilih Kategori</label>
+                        <select class="form-select" name="kategori" id="kategori">
+                            <option value="1" selected>Makanan</option>
+                            <option value="2">Minuman</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <label for="harga" class="form-label">Harga</label>
+                        <input type="number" class="form-control" name="harga" id="harga" value="" required min="0" data-bind="value:harga" >
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Simpan" class="btn btn-primary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+
+    <div class="bd-example-snippet bd-code-snippet">
+        <div class="bd-example m-0 border-0">
+            <p class="h2">
+                Data Barang
+                <button type="button" id="btnTambah" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
+                    Tambah Barang
+                </button>
+            </p>
+            
+        </div>
+    </div>
+    
+    <div class="container my-1">
+        <!-- Panel Container dengan Scroll -->
+        <div class="panel-barang">
+            <div class="bd-example m-0 border-0">
+                <table id="example" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Barang</th>
+                        <th scope="col">Kategori</th>
+                        <th scope="col">Harga</th>
+                        <th scope="col">Stok</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                {{range .Barangs}}
+                    <tr>
+                        <th scope="row">{{.ID}}</th>
+                        <td>{{.NamaBarang}}</td>
+                        <td style="text-align: center;">{{.KategoriBarang.NamaKategori}}</td>
+                        <td style="text-align: right;">{{.Harga}}</td>
+                        <td style="text-align: right;">{{.Stok}}</td>
+                        <td style="text-align: center;">
+                            <a href="/update?id={{.ID}}" class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+                            <a href="/delete?id={{.ID}}" class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    <!--ID Barang: {{.ID}} - Nama: {{.NamaBarang}} Kategori: {{.KategoriBarang.NamaKategori}} - Harga: {{.Harga}} - Stok: {{.Stok}}-->
+                {{end}}
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Barang</th>
+                        <th>Kategori</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{{end}}
+

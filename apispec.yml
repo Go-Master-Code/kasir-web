@@ -1,0 +1,137 @@
+openapi: '3.0.3'
+info:
+  title: API Inventory Minimarket
+  description: API untuk mengelola inventory minimarket
+  version: '1.0.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /inventory:
+    post:
+      summary: Menambahkan data barang
+      description: Menambahkan data barang baru ke inventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: ID barang
+                  example: 1
+                nama:
+                  type: string
+                  description: Nama barang
+                  example: Gerry Cracker Beras
+                harga:
+                  type: integer
+                  description: Harga barang
+                  example: 2000
+                stok:
+                  type: integer
+                  description: Stok barang
+                  example: 10
+      responses:
+        '200':
+          description: Barang berhasil ditambahkan
+        '404':
+          description: Barang tidak valid
+    put:
+      summary: Mengupdate barang berdasarkan ID
+      description: Mengupdate data barang dengan ID yang diberikan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID barang yang ingin diambil
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: ID barang
+                  example: 1
+                nama:
+                  type: string
+                  description: Nama barang
+                  example: Gerry Cracker Beras
+                harga:
+                  type: integer
+                  description: Harga barang
+                  example: 2000
+                stok:
+                  type: integer
+                  description: Stok barang
+                  example: 10
+      responses:
+        '200':
+          description: Barang berhasil diupdate
+        '400':
+          description: Input data barang tidak valid
+        '404':
+          description: Barang tidak ditemukan
+    delete:
+      summary: Menghapus data barang
+      description: Menghapus data barang dengan ID yang diberikan vendor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID barang yang ingin dihapus
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Barang berhasil dihapus
+        '404':
+          description: Barang tidak ditemukan
+    get:
+      summary: Mengambil daftar barang
+      responses:
+        '200':
+          description: Data barang berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID barang
+                    nama:
+                      type: string
+                      description: Nama barang
+                    harga:
+                      type: integer
+                      description: Harga barang
+                    stok:
+                      type: integer
+                      description: Stok barang
+  /inventory/{id}:
+    get:
+      summary: Mengambil data barang berdasarkan id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID barang yang ingin diambil
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Barang berhasil ditemukan
+        '404':
+          description: Barang tidak ditemukan
+    
+  
+

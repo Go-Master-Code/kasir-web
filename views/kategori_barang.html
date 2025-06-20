@@ -1,0 +1,40 @@
+{{template "layout" .}}
+
+{{define "main"}}
+    <div class="bd-example-snippet bd-code-snippet">
+        <div class="bd-example m-0 border-0">
+            <p class="h2">
+                Kategori Barang                
+            </p>
+           
+            <form action="/update" method="post" class="row g-3">
+                
+                <div class="col-md-8">
+                    <label for="kategori" class="form-label">Pilih Kategori</label>
+                    <select class="form-select" name="kategori" id="kategori">
+                        {{range .Kategories}}
+                        <option value="{{.ID}}">{{.NamaKategori}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <label for="user" class="form-label">Pilih User</label>
+                    <select class="form-select" name="user" id="user">
+                        {{range .Users}}
+                        <option value="{{.ID}}">{{.Password}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <label for="cobaKategori" class="form-label">Selected Kategori</label>
+                    <select class="form-select" name="cobaKategori" id="cobaKategori">
+                        {{range .Kategories}}
+                        <option value="{{.ID}}" {{if eq .ID $.KategoriTerpilih}}selected{{end}}>{{.NamaKategori}}</option>
+                        {{end}}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+{{end}}
+

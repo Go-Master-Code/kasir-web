@@ -1,0 +1,28 @@
+.header{
+    margin-bottom: 30px;
+}
+
+.box-with-shadow{
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px #888888;
+    margin-bottom: 30px;
+}
+
+.text {
+    color: blue;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+}
+
+.footer {
+    color: red;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:large
+}
+
+.header {
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:large
+}

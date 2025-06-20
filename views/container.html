@@ -1,0 +1,81 @@
+{{template "layout" .}}
+
+{{define "main"}}
+<style>
+    /* Memberikan scroll jika konten melebihi tinggi */
+    .panel-container {
+        max-height: 500px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Panel Container dengan Scroll -->
+    <div class="panel-container">
+        <h2>Panel Konten</h2>
+        <p>Ini adalah panel konten di dalam container. Konten ini dapat lebih panjang dari ukuran panel dan dapat di-scroll secara vertikal jika diperlukan.</p>
+        
+        <!-- Elemen-elemen di dalam panel -->
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Elemen 1</h5>
+                        <p class="card-text">Ini adalah elemen pertama dalam panel.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Elemen 2</h5>
+                        <p class="card-text">Ini adalah elemen kedua dalam panel.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Elemen 3</h5>
+                        <p class="card-text">Ini adalah elemen ketiga dalam panel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Elemen 4</h5>
+                        <p class="card-text">Ini adalah elemen keempat dalam panel.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Elemen 5</h5>
+                        <p class="card-text">Ini adalah elemen kelima dalam panel.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Elemen 6</h5>
+                        <p class="card-text">Ini adalah elemen keenam dalam panel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{end}}
+

@@ -1,0 +1,47 @@
+{{template "layout" .}}
+
+{{define "main"}}
+    <div class="bd-example-snippet bd-code-snippet">
+        <div class="bd-example m-0 border-0">
+            <p class="h2">
+                Update Data Barang                
+            </p>
+            {{range .Barangs}}
+            <form action="/update?id={{.ID}}" method="post" class="row g-3">
+                <div class="col-md-2">
+                    <label for="idBarang" class="form-label fw-bold">ID Barang</label>
+                    <input type="text" name="idBarang" class="form-control" id="idBarang" value="{{.ID}}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label for="barang" class="form-label fw-bold">Nama Barang</label>
+                    <input type="text" name="barang" class="form-control" id="barang" value="{{.NamaBarang}}" required>
+                </div>
+                {{end}}
+                <div class="col-md-2">
+                    <label for="kategori" class="form-label fw-bold">Kategori</label>
+                    <select class="form-select" name="kategori" id="kategori">
+                        {{range .Kategories}}
+                        <option value="{{.ID}}" {{if eq .ID $.SelectedCategoryID}}selected{{end}}>{{.NamaKategori}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                {{range .Barangs}}
+                <div class="col-md-2">
+                    <label for="harga" class="form-label fw-bold">Harga</label>
+                    <input type="number" step="1" class="form-control" name="harga" id="harga" value="{{.Harga}}" required min="0" data-bind="value:harga" >
+                </div>   
+                <div class="col-md-2">
+                    <label for="stok" class="form-label fw-bold">Stok</label>
+                    <input type="number" step="1" class="form-control" name="stok" id="stok" value="{{.Stok}}" required min="0" data-bind="value:stok" >
+                </div>
+                {{end}}
+
+                <div class="col-md-8">
+                    <input type="submit" value="Simpan" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back();">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{{end}}
+

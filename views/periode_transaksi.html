@@ -1,0 +1,52 @@
+{{template "layout" .}}
+
+{{define "main"}}
+    <h1>Masukkan periode laporan transkasi</h1>
+        
+    <form id="datetimeForm" method="POST" action="/laporan_transaksi_periode" class="row g-3">
+        <div class="col-md-2">
+            <!-- Input DateTime Picker -->
+            <label for="dari" class="form-label fw-bold">Dari:</label>
+            <!--input type="datetime-local" id="dari" name="dari" required>-->
+            <input type="date" class="form-control" id="dari" name="dari" required>
+         
+        </div>
+        <div class="col-md-2">
+            <label for="sampai" class="form-label fw-bold">Sampai:</label>
+            <input type="date" class="form-control" id="sampai" name="sampai" required>
+        </div>
+        
+        <!--<p id="result" class="col-md-4 mb-0 text-body-secondary"></p>-->
+        <div class="col-md-10">
+            <p id="result" class="form-floating mb-3" style="color:red;"></p>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Kirim</button>
+            
+        </div>
+        
+    </form>
+
+    <script>
+        // Mengambil elemen form
+        const form = document.getElementById('datetimeForm');
+
+        // Menangani pengiriman form
+        form.addEventListener('submit', function(event) {
+            //event.preventDefault(); // Menghentikan form agar tidak refresh halaman
+
+            // Mengambil nilai dari date time picker
+            const dari = document.getElementById('dari').value;
+            const sampai = document.getElementById('sampai').value;
+
+            if (sampai<dari) {
+                // Menampilkan nilai yang dipilih
+                document.getElementById('result').innerText = "Format tanggal dari dan sampai salah!";
+                event.preventDefault(); // Menghentikan form agar tidak refresh halaman
+            }else {
+                // Menampilkan nilai yang dipilih
+               // document.getElementById('result').innerText = "Periode laporan : " + dari+" sampai : "+sampai;
+            }
+            });
+    </script>
+    
+{{end}}

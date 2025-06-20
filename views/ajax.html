@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <!--<link rel="stylesheet" href="/assets/style.css">-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div>
+        <button type="submit">Login</button>
+      </div>
+      <div id="loginError" class="text-body-secondary" style="color:red;"></div>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#loginForm').on('submit', function(event) {
+        event.preventDefault();  // Mencegah reload halaman
+        
+        // Ambil data form
+        var username = $('#username').val();
+        var password = $('#password').val();
+        
+        // Kirim data ke server menggunakan AJAX
+        $.ajax({
+          url: '/ajax',
+          method: 'POST',
+          data: { username: username, password: password },
+          success: function(response) {
+            if (response.success) {
+              alert('Login berhasil!');
+              // Redirect atau ubah konten halaman setelah login berhasil
+              window.location.href = '/barang';
+            } else {
+              $('#loginError').text(response.message);
+            }
+          },
+          error: function() {
+            $('#loginError').text('Terjadi kesalahan. Silakan coba lagi.');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

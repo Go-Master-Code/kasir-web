@@ -1,0 +1,62 @@
+{{template "layout" .}}
+
+{{define "main"}}
+<style>
+    #suggestions {
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        display: none;
+    }
+    #suggestions div {
+        padding: 8px;
+        cursor: pointer;
+    }
+    #suggestions div:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<h1>Masukkan Merk Barang</h1>
+    
+    <input type="text" id="merkInput" placeholder="Ketik merk barang..." oninput="filterSuggestions()">
+    
+    <!-- Tempat untuk menampilkan hasil pencarian -->
+    <div id="suggestions"></div>
+
+    <script>
+        // Daftar merk barang
+        const merkBarang = [
+            "Samsung", "Apple", "Sony", "LG", "Xiaomi", "Huawei", "Nokia", "Motorola", "Asus"
+        ];
+
+        function filterSuggestions() {
+            const inputValue = document.getElementById('merkInput').value.toLowerCase();
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = ''; // Clear previous suggestions
+            suggestions.style.display = 'none'; // Hide suggestions by default
+            
+            if (inputValue) {
+                const filteredItems = merkBarang.filter(merk => merk.toLowerCase().includes(inputValue));
+                
+                // Menampilkan hasil filter
+                filteredItems.forEach(item => {
+                    const div = document.createElement('div');
+                    div.textContent = item;
+                    div.onclick = function() {
+                        document.getElementById('merkInput').value = item;
+                        suggestions.innerHTML = ''; // Clear suggestions
+                        suggestions.style.display = 'none'; // Hide suggestions
+                    };
+                    suggestions.appendChild(div);
+                });
+                
+                if (filteredItems.length > 0) {
+                    suggestions.style.display = 'block'; // Show suggestions if there are results
+                }
+            }
+        }
+    </script>
+
+{{end}}
+

@@ -1,0 +1,412 @@
+{{template "layout" .}}
+
+{{define "main"}}
+    <script>
+        function hitungJumlahBaris() {
+            // Mendapatkan elemen tabel
+            var tabel = document.getElementById('dynamicTable');
+            
+            // Mendapatkan semua baris pada tbody (mengabaikan baris header)
+            var baris = tabel.getElementsByTagName('tbody')[0].rows;
+            
+            //ubah jumlah baris untuk iterasi input data detil_transaksi
+            document.getElementById('jmlItem').value=baris.length
+        }
+
+        function TampilBarang() {
+            // Ambil nilai input dari pengguna
+            const dropdown = document.getElementById("selectBarang");
+            const selectedValue = dropdown.value;
+            const idBarang = document.getElementById("idBarang");
+            idBarang.value = selectedValue;
+
+            // Ambil semua elemen list barang
+            var barangList = document.querySelectorAll("#barangList li");
+            
+            // Menyimpan hasil perbandingan
+            const hrgAktual = document.getElementById("harga");
+            const stokAktual = document.getElementById("stok");
+
+            // Iterasi untuk setiap barang
+            barangList.forEach(function(item) {
+                var id = item.getAttribute("data-id");
+                var barang = item.getAttribute("data-barang");
+                var hrg = item.getAttribute("data-harga");
+                var stk = item.getAttribute("data-stok");
+
+                // Bandingkan id dari input combo box dengan id barang dari struct
+                if (id === selectedValue) {
+                    hrgAktual.value=hrg
+                    stokAktual.value=stk
+                } else if(selectedValue === "") { //jika barang belum dipilih
+                    hrgAktual.value=""
+                    stokAktual.value=""
+                }
+            });
+        }
+
+        function TampilRowBarang(baris) {
+            // Ambil nilai input dari pengguna
+            const dropdown = document.getElementById("barangRow"+baris);
+            const selectedValue = dropdown.value;
+            const kodeRow = document.getElementById("kodeRow"+baris);
+            kodeRow.value = selectedValue;
+
+            // Ambil semua elemen list barang
+            var barangList = document.querySelectorAll("#barangList li");
+            
+            // Menyimpan hasil perbandingan
+            const hargaRow = document.getElementById("hargaRow"+baris);
+            const stokRow = document.getElementById("stokRow"+baris);
+            const qtyRow = document.getElementById("qtyRow"+baris);
+            const subtotalRow = document.getElementById("subtotalRow"+baris);
+
+            // Iterasi untuk setiap barang
+            barangList.forEach(function(item) {
+                var id = item.getAttribute("data-id");
+                var barang = item.getAttribute("data-barang");
+                var hrg = item.getAttribute("data-harga");
+                var stk = item.getAttribute("data-stok");
+
+                // Bandingkan id dari input combo box dengan id barang dari struct
+                if (id === selectedValue) {
+                    hargaRow.value=hrg
+                    stokRow.value=stk
+                    subtotalRow.value=qtyRow.value*hrg
+                    if (subtotalRow.value>0) {
+                        EnableButtonTambah()
+                        EnableButtonSimpan()
+                    }
+                } else if(selectedValue === "") { //jika barang belum dipilih
+                    hargaRow.value=""
+                    stokRow.value=""
+                    subtotalRow.value=""
+                    qtyRow.value=""
+                    DisableButtonSimpan()
+                    DisableButtonTambah()
+                }
+            });
+        }
+
+        //jika jumlah row barang > 0 enable button save
+
+        function UpdateKembali() {
+            // Inisiasi value total
+            const total = document.getElementById("total");
+            const bayar = document.getElementById("bayar");
+            const kembali = document.getElementById("kembali");
+            change = parseInt(bayar.value) - parseInt(total.value)
+            if (change<0) {
+                kembali.value=0
+            } else {
+                kembali.value=change
+            }
+        }
+
+        function UpdateTotal(baris) {
+            angka = document.getElementById('jmlBaris').value;
+            //alert("Jumlah Iterasi :"+angka)
+
+            //hitung subtotal per row
+            const subtotalRow = document.getElementById("subtotalRow"+baris);
+            const hargaRow = document.getElementById("hargaRow"+baris);
+            const stokRow = document.getElementById("stokRow"+baris);
+            const qtyRow = document.getElementById("qtyRow"+baris);
+            subtotalRow.value=qtyRow.value*hargaRow.value;
+            
+            // Inisiasi value total
+            const total = document.getElementById("total");
+
+            if (total.value==="") { //initial value
+                //alert("Subtotal change pertama kali")
+                total.value=parseInt(subtotalRow.value);
+                //enable button kembali
+                if (total.value>0) {
+                    EnableButtonTambah();
+                    EnableButtonSimpan();
+                }
+            } else {
+                agregat=0;
+                // Lakukan iterasi pada semua field subtotal
+                for (var i = 1; i <=angka; i++) {
+                    //alert("Iterasi ke -"+i)
+                    //alert("Elemen yang diperiksa :"+document.getElementById("subtotalRow"+i))
+                    
+                    //alert("Subtotal row :"+i+" sejumlah :"+document.getElementById("subtotalRow"+i).value)
+                    subElement = document.getElementById("subtotalRow"+i)
+                    if (subElement !== null) {
+                        if (subElement.value!=="") {
+                            sub = subElement.value;
+                            //alert("Subtotal ke :"+i+" adalah :"+sub)
+                            agregat=agregat+parseInt(sub);
+
+                            //enable button kembali jika value nya > 0
+                            if (sub>0) {
+                                EnableButtonTambah();
+                                EnableButtonSimpan();
+                            } else {
+                                DisableButtonTambah();
+                                DisableButtonSimpan();
+                            }
+                            
+                            //alert("Agregat :"+agregat)
+                        }
+                    }
+                }
+                total.value=agregat;
+            }
+
+            /*Checkpoint sementara
+            const subtotalRow = document.getElementById("subtotalRow"+baris);
+            const hargaRow = document.getElementById("hargaRow"+baris);
+            const stokRow = document.getElementById("stokRow"+baris);
+            const qtyRow = document.getElementById("qtyRow"+baris);
+            subtotalRow.value=qtyRow.value*hargaRow.value
+
+            const total = document.getElementById("total");
+            
+            if (total.value==="") { //initial value
+                //alert("Subtotal change pertama kali")
+                total.value=parseInt(subtotalRow.value)
+            }else {
+                //jika subtotal tidak kosong, tambahkan ke var agregat
+                sub = parseInt(subtotalRow.value)
+                tot = parseInt(total.value)
+                agregat = sub+tot
+                
+                total.value=agregat
+            }
+            end of checkpoint */
+        }
+
+        function kurangiTotal(baris) {
+            const qtyRow = document.getElementById("qtyRow"+baris);
+
+            if (qtyRow!=="") {
+                const hargaRow = document.getElementById("hargaRow"+baris);
+                const subtotalRow = document.getElementById("subtotalRow"+baris);
+                subtotalRow.value=qtyRow.value*hargaRow.value
+                const total = document.getElementById("total");
+                
+                if (total.value==="") { //initial value
+                    //alert("Subtotal change pertama kali")
+                    total.value=parseInt(subtotalRow.value)
+                }else {
+                    //alert("Total saat ini: "+total.value)
+                    //alert("Pengurangan :"+subtotalRow.value)
+                    //alert("Tambahan subtotal :"+subtotalRow.value)
+                    
+                    sub = parseInt(subtotalRow.value)
+                    tot = parseInt(total.value)
+                    agregat = tot-sub
+                    
+                    
+                    total.value=agregat
+                    //alert("Saldo total akhir :"+agregat)
+                    //terakhir sampai sini
+                    //looping elemen subtotal untuk mendapatkan total
+                }
+            }
+        }
+    </script>
+
+    <script>
+        let rowId = 1;  // ID baris mulai dari 1
+        
+        // Fungsi untuk menambah baris baru
+        function addRow() {
+            const tableBody = document.getElementById("dynamicTable").getElementsByTagName('tbody')[0];
+            
+            // Membuat baris baru
+            let newRow = tableBody.insertRow();
+            
+            // Menambahkan sel ke dalam baris
+            let cell1 = newRow.insertCell(0);
+            let cell2 = newRow.insertCell(1);
+            let cell3 = newRow.insertCell(2);
+            let cell4 = newRow.insertCell(3);
+            let cell5 = newRow.insertCell(4);
+            let cell6 = newRow.insertCell(5);
+            let cell7 = newRow.insertCell(6);
+            let cell8 = newRow.insertCell(7);
+            
+            // Mengisi sel dengan data atau form input
+            cell1.textContent = rowId++;  // ID otomatis bertambah
+            cell2.innerHTML = `<input type="text" class="form-control" readonly id="kodeRow${rowId-1}" name="kodeRow${rowId-1}" value=""/>`;
+            cell3.innerHTML = `<select class="form-select" name="barang" id="barangRow${rowId-1}" onchange="TampilRowBarang(${rowId-1}); UpdateTotal(${rowId-1})">
+                                <option value="">Pilih barang</option>
+                                {{range .Barangs}}
+                                    <option value="{{.ID}}">{{.NamaBarang}}</option>
+                                {{end}}
+                            </select>`;
+            
+            cell4.innerHTML = `<input type="text" style="text-align: right;" tabindex="-1" class="form-control" id="stokRow${rowId-1}" readonly value=""/>`;
+            cell5.innerHTML = `<input type="text" style="text-align: right;" tabindex="-1" class="form-control" id="hargaRow${rowId-1}" readonly value=""/>`;
+            cell6.innerHTML = `<input type="number" style="text-align: right;" class="form-control" name="qtyRow${rowId-1}" id="qtyRow${rowId-1}" onchange="UpdateTotal(${rowId-1})" onkeyup="UpdateTotal(${rowId-1}); CekQtyDanStok(${rowId-1})" value="" required min="1" max="1000" data-bind="value:qtyRow" >`;
+            cell7.innerHTML = `<input type="text" style="text-align: right;" tabindex="-1" class="form-control" id="subtotalRow${rowId-1}" readonly value=""/>`;
+            cell8.innerHTML = `<button class="btn btn-danger btn-sm" onclick="kurangiTotal(${rowId-1}); deleteRow(this); hitungJumlahBaris();">Hapus</button>`;
+                            
+            //disable button dulu
+            DisableButtonTambah()
+            
+        }
+        
+        // Fungsi untuk menghapus baris
+        function deleteRow(button) {
+            // Menemukan baris yang berisi tombol yang diklik
+            let row = button.closest("tr");
+            row.remove();
+            //enable button kembali
+            EnableButtonTambah()
+        }
+    </script>
+
+    <script>
+        function getTextboxId() {
+            // Ambil elemen tabel berdasarkan ID
+            var table = document.getElementById('dynamicTable');
+            
+            // Ambil semua elemen <input> di dalam tabel
+            var inputs = table.getElementsByTagName('input');
+            
+            // Menyusun ID dari semua elemen <input>
+            var inputIds = [];
+            var lastId=""
+            for (var i = 0; i < inputs.length; i++) {
+                inputIds.push(inputs[i].id);
+                lastId=inputs[i].id
+            }
+
+            // Menggunakan regex untuk mengekstrak semua angka dalam string
+            const angka = lastId.match(/\d+/g);
+            // Jumlah iterasi
+            document.getElementById('jmlBaris').value=angka
+            //document.getElementById('output').innerText = 'ID Textbox: ' + angka;
+        }
+
+        function DisableButtonTambah() {
+            document.getElementById("btnTambahBaris").disabled = true;
+        }
+
+        function EnableButtonTambah() {
+            document.getElementById("btnTambahBaris").disabled = false;
+        }
+
+        function DisableButtonSimpan() {
+            document.getElementById("Simpan").disabled = true;
+        }
+
+        function EnableButtonSimpan() {
+            document.getElementById("Simpan").disabled = false;
+        }
+
+        function Reload() { //ketika batal transaksi, halaman di refresh
+            location.reload()
+        }
+
+        function CekQtyDanStok(baris) {
+            const qty = document.getElementById("qtyRow"+baris);
+            const stok = document.getElementById("stokRow"+baris);
+            if (parseInt(qty.value)>parseInt(stok.value)) {
+                qty.focus();
+                qty.value=0;
+                UpdateTotal(baris);
+                var btnSalah = document.getElementById("salah");
+                btnSalah.click();
+            }
+        }
+    </script>
+
+    <p class="h2">
+        Data Transaksi
+        <!-- Tombol untuk menambah baris -->
+        <button type="button" onclick="addRow(); getTextboxId(); hitungJumlahBaris()" id="btnTambahBaris" class="btn btn-primary">
+            Tambah Baris
+        </button>
+        <button type="button" id="salah" class="btn btn-primary" style="display: none;" data-bs-toggle="modal" data-bs-target="#staticBackdropLive">
+            Launch static backdrop modal
+          </button>
+         </p>
+
+        <div class="modal fade" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLiveLabel">Kesalahan</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>
+                    Stok yang tersedia lebih kecil daripada qty yang diminta!<br>
+                    Silakan cek kembali qty yang anda masukkan.
+                  </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mengerti</button>
+                    <!--<button type="button" class="btn btn-primary">Understood</button>-->
+                </div>
+              </div>
+            </div>
+        </div>
+    
+    <div class="container my-1">
+        <!-- Panel Container dengan Scroll -->
+        <div class="panel-container">
+            <form action="/save_transaksi" method="post" class="row g-3">
+                <input type="text" hidden name="jmlBaris" class="form-control" id="jmlBaris" value="" readonly>
+                <table id="dynamicTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kode</th>
+                            <th>Barang</th>
+                            <th>Stok</th>
+                            <th>Harga</th>
+                            <th>Qty</th>
+                            <th>SubTotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Baris tabel akan ditambahkan di sini -->
+                    </tbody>
+                </table>
+                <div class="container mt-1">
+                    <div class="row mb-1">
+                        <label for="jmlItem" class="col-sm-1 col-form-label fw-bold"># Item</label>
+                        <div class="col-sm-1">
+                            <input type="text" tabindex="-1" style="text-align: right;" name="jmlItem" class="form-control" id="jmlItem" readonly value=""/>
+                        </div>
+                        <label for="total" class="col-sm-1 col-form-label fw-bold">Total</label>
+                        <div class="col-sm-2">
+                            <input type="text" tabindex="-1" style="text-align: right;" class="form-control" id="total" readonly value=""/>
+                        </div>
+                        <label for="bayar" class="col-sm-1 col-form-label fw-bold">Bayar</label>
+                        <div class="col-sm-2">
+                            <input type="number" style="text-align: right;" class="form-control" name="bayar" id="bayar" required min="1" onchange="UpdateKembali()" onkeyup="UpdateKembali()" data-bind="value:bayar" value=""/>
+                        </div>
+                        <label for="kembali" class="col-sm-1 col-form-label fw-bold">Kembali</label>
+                        <div class="col-sm-1">
+                            <input type="text" style="text-align: right;" tabindex="-1" class="form-control" id="kembali" readonly value=""/>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Simpan" id="Simpan" disabled class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" onclick="Reload()">Batal</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            <!--<h2>Daftar Barang (Hidden)</h2>-->
+            <ul id="barangList" class="hidden-list">
+                {{range .Barangs}}
+                    <li data-id="{{.ID}}" data-barang="{{.NamaBarang}}" data-stok="{{.Stok}}" data-harga="{{.Harga}}">
+                        ID: {{.ID}} - Barang: {{.NamaBarang}} - Stok: {{.Stok}} - Harga: {{.Harga}}
+                    </li>
+                {{end}}
+            </ul>
+            <!--<p id="comparisonResult"></p>-->
+        </div>
+    </div>
+    
+{{end}}

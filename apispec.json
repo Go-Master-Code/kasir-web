@@ -1,0 +1,289 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "RESTful API Inventory Minimarket",
+    "description": "API untuk mengakses inventory minimarket",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3000/api"
+    }
+  ],
+  "paths": {
+    "/inventory": {
+      "get": {
+        "security": [{
+            "InventoryAuth" : []
+        }],
+        "tags": [
+            "Inventory API"
+        ],
+        "description": "Data semua inventory",
+        "summary": "Tampilkan semua data inventory",
+        "operationId": "getInventory",
+        "responses": {
+          "200": {
+            "description": "Sukses mendapatkan data semua inventory",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code" : {
+                        "type": "number"
+                    },
+                    "status" : {
+                        "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Inventory"
+                      }
+                    }
+                   }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+            "security": [{
+                "InventoryAuth" : []
+            }],
+            "tags": ["Inventory API"],
+            "description": "Menambahkan data inventory baru",
+            "summary": "Tambah Inventory baru",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateOrUpdateInventory"
+                        }
+                    }
+                }
+            },
+            "responses": {
+            "200": {
+                "description": "Berhasil menambahkan inventory",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                        "properties": {
+                            "code" : {
+                                "type": "number"
+                            },
+                            "status" : {
+                                "type": "string"
+                            },
+                            "data": {
+                                "$ref": "#/components/schemas/Inventory"
+                            }
+                        }
+                    }
+                }
+                }
+            }
+            }
+        }
+      },
+    "/inventory/{idBarang}" : {
+      "get" : {
+        "security": [{
+            "InventoryAuth" : []
+        }],
+        "tags": ["Inventory API"],
+        "summary": "Tampilkan inventory berdasarkan ID",
+        "description": "Tampilkan inventory berdasarkan ID",
+        "parameters": [
+          {
+            "required": true,
+            "name": "idBarang",
+            "in": "path",
+            "description": "ID barang",
+            "schema": {
+              "type": "number",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200" : {
+            "description": "Berhasil menampilkan inventory berdasarkan ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                        "code" : {
+                        "type": "number"
+                        },
+                        "status" : {
+                            "type": "string"
+                        },
+                        "data": {
+                            "$ref": "#/components/schemas/Inventory"
+                        }
+                    }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "security": [{
+            "InventoryAuth" : []
+        }],
+        "tags": ["Inventory API"],
+        "summary": "Update data inventory berdasarkan ID",
+        "description": "Update data inventory berdasarkan ID",
+        "parameters": [
+          {
+            "required": true,
+            "name": "idBarang",
+            "in": "path",
+            "description": "ID barang",
+            "schema": {
+              "type": "number",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateInventory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200" : {
+            "description": "Update data inventory sukses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                        "code" : {
+                        "type": "number"
+                        },
+                        "status" : {
+                            "type": "string"
+                        },
+                        "data": {
+                            "$ref": "#/components/schemas/Inventory"
+                        }
+                    }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [{
+            "InventoryAuth" : []
+        }],
+        "tags": ["Inventory API"],
+        "summary": "Hapus inventory berdasarkan ID",
+        "description": "Hapus inventory berdasarkan ID",
+        "parameters": [
+          {
+            "required": true,
+            "name": "idBarang",
+            "in": "path",
+            "description": "ID barang",
+            "schema": {
+              "type": "number",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200" : {
+            "description": "Hapus data inventory berhasil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                        "code" : {
+                            "type": "number"
+                        },
+                        "status" : {
+                            "type": "string"
+                        }
+                    }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    },
+    "components": {
+    "securitySchemes": {
+      "InventoryAuth" : {
+        "type": "apiKey",
+        "in" : "header",
+        "name": "X-API-Key",
+        "description": "Authentication for Inventory API"
+      }
+    },
+    "schemas": {
+      "CreateOrUpdateInventory" : {
+        "type": "object",
+        "properties": {
+          "nama_barang": {
+            "type": "string",
+            "example": "Chitato Lite"
+          },
+          "harga": {
+            "type": "number",
+            "example":"9000"
+          },
+          "stok": {
+            "type": "number",
+            "example" : "100"
+          },
+          "id_kategori": {
+              "type": "number",
+              "example" : "2"
+          }
+        }
+      },
+      "Inventory" : {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "number",
+                "example" : "1"
+            },
+            "nama_barang": {
+                "type": "string",
+                "example" : "Chitato Lite"
+            },
+            "harga": {
+                "type": "number",
+                "example" : "9000"
+            },
+            "stok": {
+                "type": "number",
+                "example" : "100"
+            },
+            "id_kategori": {
+                "type": "number",
+                "example" : "2"
+            }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{{template "layout" .}}
+
+{{define "main"}}
+    <h2>Upload File Data Barang dalam bentuk file Excel (.xlsx)</h2>
+    <form action="/save_import_barang" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label" for="file">Pilih File Excel (Maks. 10 MB):</label>
+            <input type="file" name="file" class="form-control" id="file" accept=".xlsx" required>
+          </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{{end}}
+

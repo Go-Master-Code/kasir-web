@@ -1,0 +1,24 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistem Informasi Kasir</title>
+
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="header">
+        Header Sistem Informasi Kasir Web
+    </div>
+    
+    {{template "main" .}} <!--Artinya kalau ada template dengan nama main, maka akan di load di bagian ini, header dan footer sudah otomatis ada mengikuti template ini-->
+
+    <div class="footer">
+        Footer Sistem Informasi Kasir Web 2024
+    </div>
+</body>
+</html>
+{{end}}
