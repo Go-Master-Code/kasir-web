@@ -1,5 +1,5 @@
 Deskripsi sistem:
-Berikut adalah mesin kasir berbasis web menggunakan Go (Golang) sebagai backend, dan JavaScript pada frontend.
+Berikut adalah dashboard admin (POS) berbasis web menggunakan Go (Golang) sebagai backend, dan JavaScript pada frontend.
 Aplikasi ini akan digunakan di minimarket untuk mempermudah pengelolaan barang, transaksi, dan stok.
 Berikut adalah fitur-fitur yang tersedia:
 
