@@ -4,7 +4,7 @@ Aplikasi ini akan digunakan di minimarket untuk mempermudah pengelolaan barang, 
 Berikut adalah fitur-fitur yang tersedia:
 
 1. **Menu Dashboard**: 
-    - Menunjukkan grafik penjualan per tanggal
+    - Menunjukkan grafik jumlah pengunjung bulanan
 
 2. **Menu Inventory (CRUD)**: 
     - Tambah barang baru.
